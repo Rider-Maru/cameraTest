@@ -35,7 +35,7 @@ video.addEventListener("loadedmetadata", function (e) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         var imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
         var data = imagedata.data;
-        var allPicColor = 0.0;
+        var allPicColor = 0;
         for (var i = 0; i < canvas.height; i++) {
             for (var j = 0; j < canvas.width; j++) {
                 var index = (i * canvas.width + j) * 4;
