@@ -3,6 +3,7 @@ var video = document.getElementById("video");
 //取得するメディア情報を指定
 var medias = { audio: false, video: {} };
 medias.video.facingMode = { exact: "user" };
+window.alert("user");
 //getUserMediaを用いて、webカメラの映像を取得
 navigator.mediaDevices.getUserMedia(medias).then(
     function (stream) {
