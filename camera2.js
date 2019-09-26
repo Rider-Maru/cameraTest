@@ -2,7 +2,7 @@
 var video = document.getElementById("video");
 //取得するメディア情報を指定
 var medias = { audio: false, video: {} };
-medias.video.facingMode = { exact: "environment" };
+medias.video.facingMode = { exact: "user" };
 //getUserMediaを用いて、webカメラの映像を取得
 navigator.mediaDevices.getUserMedia(medias).then(
     function (stream) {
@@ -12,7 +12,7 @@ navigator.mediaDevices.getUserMedia(medias).then(
 ).catch(
     function (err) {
         //カメラの許可がされなかった場合にエラー
-        window.alert("カメラの使用が許可されませんでした");
+        window.alert("not allowed to use camera");
     }
 );  
 
