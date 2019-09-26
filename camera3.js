@@ -2,8 +2,9 @@
 var video = document.getElementById("video");
 //取得するメディア情報を指定
 var medias = { audio: false, video: {} };
-medias.video.facingMode = { exact: "user" };
-document.getElementById("str").textContent = "user";
+//medias.video.facingMode = { exact: "user" };
+medias.video.facingMode = { exact: "environment" };
+document.getElementById("str").textContent = "environment";
 
 //getUserMediaを用いて、webカメラの映像を取得
 navigator.mediaDevices.getUserMedia(medias).then(
@@ -34,7 +35,7 @@ video.addEventListener("loadedmetadata", function (e) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         var imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
         var data = imagedata.data;
-
+        var allPicColor = 0.0;
         for (var i = 0; i < canvas.height; i++) {
             for (var j = 0; j < canvas.width; j++) {
                 var index = (i * canvas.width + j) * 4;
@@ -48,8 +49,13 @@ video.addEventListener("loadedmetadata", function (e) {
                 data[index + 0] = color;
                 data[index + 1] = color;
                 data[index + 2] = color;
+                allPicColor += color;
             }
         }
+        var val = allPicColor / (canvas.height * canvas.width);
+        document.getElementById("debug").textContent = val;
+        if (val > 50) document.getElementById("debug_bool").textContent = "false";
+        else document.getElementById("debug_bool").textContent = "true";
         ctx.putImageData(imagedata, 0, 0, 0, 0, canvas.width, canvas.height);
     }, 33);  
 });  
