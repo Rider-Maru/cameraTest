@@ -3,7 +3,7 @@ var video = document.getElementById("video");
 //取得するメディア情報を指定
 var medias = { audio: false, video: {} };
 medias.video.facingMode = { exact: "user" };
-
+document.getElementById("str").textContent = "user";
 
 //getUserMediaを用いて、webカメラの映像を取得
 navigator.mediaDevices.getUserMedia(medias).then(
@@ -30,7 +30,7 @@ video.addEventListener("loadedmetadata", function (e) {
     var ctx = canvas.getContext("2d");
     //毎フレームの実行処理
     setInterval(function (e) {
-        document.getElementById("str").textContent = "user";
+        
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         var imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
         var data = imagedata.data;
