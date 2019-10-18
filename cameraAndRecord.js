@@ -1,3 +1,7 @@
+var ctx;
+var frames;
+var recorder;
+
 //videoタグを取得
 var video = document.getElementById("video");
 //取得するメディア情報を指定
@@ -59,4 +63,32 @@ video.addEventListener("loadedmetadata", function (e) {
         ctx.putImageData(imagedata, 0, 0, 0, 0, canvas.width, canvas.height);
     }, 33);  
 });  
+function frame_start() {
+    //canvasの取得
+    canvas = document.getElementById('preview');
+    ctx = canvas.getContext('2d');
+    //canvasからストリームを取得
+    var stream = canvas.captureStream();
+    //ストリームからMediaRecorderを生成
+    recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    //ダウンロード用のリンクを準備
+    var anchor = document.getElementById('downloadlink');
+    //録画終了時に動画ファイルのダウンロードリンクを生成する処理
+    recorder.ondataavailable = function (e) {
+        var videoBlob = new Blob([e.data], { type: e.data.type });
+        blobUrl = window.URL.createObjectURL(videoBlob);
+        anchor.download = 'movie.webm';
+        anchor.href = blobUrl;
+        anchor.style.display = 'block';
+    }
+    //録画開始
+    recorder.start();
+    //フレーム描画開始
+    frames = document.getElementsByClassName('anime')[0].getElementsByTagName('img');
+    viewFrame();
+}
+
+function frame_end() {
+    recorder.stop();
+}
 
