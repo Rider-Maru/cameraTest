@@ -2,43 +2,6 @@ var ctx;
 var frames;
 var recorder;
 
-var localVideo = document.getElementById('local_video');
-var playbackVideo = document.getElementById('playback_video');
-var anker = document.getElementById('downloadlink');
-var localStream = null;
-var recorder = null;
-var blobUrl = null;
-
-function startRecording() {
-    if (!localStream) {
-        console.warn("no stream");
-        return;
-    }
-    if (recorder) {
-        console.warn("recorder already exist");
-        return;
-    }
-
-    recorder = new MediaRecorder(localStream);
-    recorder.ondataavailable = function (evt) {
-        console.log("data available, start playback");
-        var videoBlob = new Blob([evt.data], { type: evt.data.type });
-        blobUrl = window.URL.createObjectURL(videoBlob);
-
-        anker.download = 'recorded.webm';
-        anker.href = blobUrl;
-    }
-    recorder.start();
-    console.log("start recording");
-}
-
-function stopRecording() {
-    if (recorder) {
-        recorder.stop();
-        console.log("stop recording");
-    }
-}
-
 //videoタグを取得
 var video = document.getElementById("video");
 //取得するメディア情報を指定
@@ -52,14 +15,14 @@ navigator.mediaDevices.getUserMedia(medias).then(
     function (stream) {
         //videoタグのソースにwebカメラの映像を指定
         video.srcObject = stream;
-        localStream = stream;
+
     }
 ).catch(
     function (err) {
         //カメラの許可がされなかった場合にエラー
         window.alert("not allowed to use camera");
     }
-);  
+);
 
 var canvas = document.getElementById("canvas");
 //ビデオのメタデータが読み込まれるまで待つ
@@ -72,7 +35,7 @@ video.addEventListener("loadedmetadata", function (e) {
     var ctx = canvas.getContext("2d");
     //毎フレームの実行処理
     setInterval(function (e) {
-        
+
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         var imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
         var data = imagedata.data;
@@ -98,8 +61,8 @@ video.addEventListener("loadedmetadata", function (e) {
         if (val > 50) document.getElementById("debug_bool").textContent = "false";
         else document.getElementById("debug_bool").textContent = "true";
         ctx.putImageData(imagedata, 0, 0, 0, 0, canvas.width, canvas.height);
-    }, 33);  
-});  
+    }, 33);
+});
 function frame_start() {
     //canvasの取得
     canvas = document.getElementById('preview');
